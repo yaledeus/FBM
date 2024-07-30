@@ -303,5 +303,5 @@ if __name__ == "__main__":
     ### curate Peptide data
     split_paths = split_pep(args.sim_dir)
     for split_path in split_paths:
+        preprocess_pep(split_path, delta=args.delta)
         save_xtc(split_path)
-        # preprocess_pep(split_path, delta=args.delta)

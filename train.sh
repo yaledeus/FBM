@@ -3,7 +3,7 @@
 ########## adjust configs according to your needs ##########
 DATA_DIR=###
 TRAIN_SET=${DATA_DIR}/train.pkl
-VALID_SET=${DATA_DIR}/valid.pkl
+VALID_SET=${DATA_DIR}/train.pkl
 SAVE_DIR=${DATA_DIR}/ckpt
 
 BATCH_SIZE=36
@@ -52,13 +52,13 @@ ${PREFIX} train.py \
     --valid_set $VALID_SET \
     --save_dir $SAVE_DIR \
     --model_type SFM \
-    --lr 8e-4 \
+    --lr 5e-4 \
     --warmup 1000 \
     --max_epoch 1000 \
     --patience 8 \
     --save_topk 10 \
-    --hidden_dim 192 \
-    --rbf_dim 50 \
+    --hidden_dim 128 \
+    --rbf_dim 32 \
     --heads 8 \
     --layers 6 \
     --cutoff 5.0 \

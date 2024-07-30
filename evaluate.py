@@ -113,7 +113,7 @@ def parse():
 
 
 def main(args):
-    traj_analysis(args.model, args.ref, top=args.top, plot=True, name=args.name)
+    traj_analysis(args.model, args.ref, top=args.top, plot=False, name=args.name)
 
 
 if __name__ == "__main__":

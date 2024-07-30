@@ -1,5 +1,4 @@
 import numpy as np
-from mendeleev import element
 
 
 ELEMENT_TYPE = ['H', 'C', 'N', 'O', 'S']

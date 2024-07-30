@@ -176,8 +176,8 @@ def openmm_simulate(pdb_path, save_path, T=300, spacing=1000, gpu=-1):
     simulation.context.setVelocitiesToTemperature(T)
 
     # frame spacing=1ps
-    simfile = os.path.join(save_path, f'{pdb_name}-sim.pdb')
-    simulation.reporters.append(PDBReporter(simfile, spacing))
+    # simfile = os.path.join(save_path, f'{pdb_name}-sim.pdb')
+    # simulation.reporters.append(PDBReporter(simfile, spacing))
     # save NPZ file (energies, positions, velocities, forces)
     trajnpzfile = os.path.join(save_path, f'{pdb_name}-traj-arrays.npz')
     simulation.reporters.append(
