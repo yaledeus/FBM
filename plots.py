@@ -52,6 +52,7 @@ def plot_tic2d(tic0_ref, tic1_ref, tic0_model, tic1_model, save_path, xlabel='TI
     model_points = (tic0_model >= tic0_min) & (tic0_model <= tic0_max) & \
                    (tic1_model >= tic1_min) & (tic1_model <= tic1_max)
 
+    plt.scatter(tic0_ref[0], tic1_ref[0], color='red', s=50)
     plt.scatter(tic0_model[model_points], tic1_model[model_points], color='orange', alpha=0.6, s=15)
 
     plt.text(0.05, 0.05, name, horizontalalignment='left', verticalalignment='bottom', transform=ax.transAxes, fontsize=40)

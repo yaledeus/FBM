@@ -90,7 +90,7 @@ def main(args):
 
         # evaluate
         _, pwd_js, rg_js, tic_js, tic2d_js, val_ca, rmse_contact = \
-            traj_analysis(ideal_model_traj, traj_npz, top=state0)
+            traj_analysis(model_traj, traj_npz, top=state0)
 
         if pwd_js != 0:
             pwd_js_list.append(pwd_js)
