@@ -61,7 +61,7 @@ Then you can use the script `train.sh` for training both FBM-base and FBM with m
 GPU=0,1 bash train.sh
 ```
 
-For training FBM, please modify the configuration `--model_type SFM` to `--model_type FSFM` and add another line including `--baseline /path/to/FBM-base/checkpoint`, where you should replace with the checkpoint file path (`.ckpt`) of FBM-base.
+For training FBM, please modify the configuration `--model_type bbm` to `--model_type fbm` and add another line including `--baseline /path/to/FBM-base/checkpoint`, where you should replace with the checkpoint file path (`.ckpt`) of FBM-base.
 
 ### Evaluation
 

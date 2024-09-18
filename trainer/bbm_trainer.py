@@ -14,7 +14,7 @@ def enable_grad(model):
         param.requires_grad = True
 
 
-class FSFMTrainer(Trainer):
+class BBMTrainer(Trainer):
 
     ########## Override start ##########
 
@@ -36,12 +36,12 @@ class FSFMTrainer(Trainer):
         log_type = 'Validation' if val else 'Train'
 
         if isinstance(self.model, nn.parallel.DistributedDataParallel):
-            loss, (loss_iff, loss_bound) = self.model.module._train(batch)
+            loss, (loss_eu, loss_aux) = self.model.module._train(batch)
         else:
-            loss, (loss_iff, loss_bound) = self.model._train(batch)
+            loss, (loss_eu, loss_aux) = self.model._train(batch)
 
         self.log(f'Loss/{log_type}', loss, batch_idx, val)
-        self.log(f'IFF Loss/{log_type}', loss_iff, batch_idx, val)
-        self.log(f'Boundary Loss/{log_type}', loss_bound, batch_idx, val)
+        self.log(f'Eu Loss/{log_type}', loss_eu, batch_idx, val)
+        self.log(f'Aux Loss/{log_type}', loss_aux, batch_idx, val)
 
         return loss

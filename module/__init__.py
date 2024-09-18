@@ -1,1 +1,1 @@
-from .model import GeomSFM, GeomFSFM
+from .model import GeomBBM, GeomFBM

@@ -66,19 +66,19 @@ def main(args):
                          grad_clip=args.grad_clip,
                          save_topk=args.save_topk)
 
-    if args.model_type == 'SFM':
-        from trainer import SFMTrainer as Trainer
-        from module import GeomSFM
+    if args.model_type.upper() == 'BBM':
+        from trainer import BBMTrainer as Trainer
+        from module import GeomBBM
         if not args.ckpt:
-            model = GeomSFM(args.hidden_dim, args.rbf_dim, args.heads, args.layers, cutoff=args.cutoff, s_eu=args.s_eu)
+            model = GeomBBM(args.hidden_dim, args.rbf_dim, args.heads, args.layers, cutoff=args.cutoff, s_eu=args.s_eu)
         else:
             model = torch.load(args.ckpt, map_location='cpu')
-    elif args.model_type == 'FSFM':
-        from trainer import FSFMTrainer as Trainer
-        from module import GeomFSFM
+    elif args.model_type.upper() == 'FBM':
+        from trainer import FBMTrainer as Trainer
+        from module import GeomFBM
         if not args.ckpt:
             baseline = torch.load(args.baseline, map_location='cpu')
-            model = GeomFSFM(baseline, args.hidden_dim, args.rbf_dim, args.heads, args.layers, cutoff=args.cutoff)
+            model = GeomFBM(baseline, args.hidden_dim, args.rbf_dim, args.heads, args.layers, cutoff=args.cutoff)
         else:
             model = torch.load(args.ckpt, map_location='cpu')
     else:

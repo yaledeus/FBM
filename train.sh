@@ -51,7 +51,7 @@ ${PREFIX} train.py \
     --train_set $TRAIN_SET \
     --valid_set $VALID_SET \
     --save_dir $SAVE_DIR \
-    --model_type SFM \
+    --model_type bbm \
     --lr 5e-4 \
     --warmup 1000 \
     --max_epoch 1000 \

@@ -19,9 +19,9 @@ def _init_linear_(module):
                 nn.init.zeros_(m.bias)
 
 
-class GeomSFM(nn.Module):
+class GeomBBM(nn.Module):
     def __init__(self, hidden_dim, rbf_dim, heads, layers, cutoff=5.0, s_eu=0.1):
-        super(GeomSFM, self).__init__()
+        super(GeomBBM, self).__init__()
 
         self.hidden_dim = hidden_dim
         self.rbf_dim = rbf_dim
@@ -132,11 +132,11 @@ class GeomSFM(nn.Module):
         return xt
 
 
-class GeomFSFM(nn.Module):
+class GeomFBM(nn.Module):
     def __init__(self, baseline, hidden_dim, rbf_dim, heads, layers, cutoff=5.0):
-        super(GeomFSFM, self).__init__()
+        super(GeomFBM, self).__init__()
 
-        self.base: GeomSFM = baseline
+        self.base: GeomBBM = baseline
         # froze parameters of baseline model
         for param in self.base.parameters():
             param.requires_grad = False
