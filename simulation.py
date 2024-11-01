@@ -15,7 +15,7 @@ def load_file(fpath):
     return items
 
 
-forcefield = ForceField('amber14-all.xml', 'implicit/obc1.xml')
+forcefield = ForceField('amber14-all.xml')
 
 
 class Spacing:

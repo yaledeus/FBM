@@ -101,7 +101,7 @@ If you find our code useful in your research, please cite the following paper:
 @misc{yu2024force,
   title={Force-Guided Bridge Matching for Full-Atom Time-Coarsened Dynamics of Peptides},
   author={Yu, Ziyang and Huang, Wenbing and Liu, Yang},
-  year={2024}
+  year={2024},
   eprint={2408.15126},
   archivePrefix={arXiv},
 }
