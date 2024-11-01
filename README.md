@@ -1,6 +1,6 @@
 # FBM
 
-Force-Guided Bridge Matching for Full-Atom Time-Coarsened Dynamics of Peptides
+The code in this repository accompanies the preprint "[Force-Guided Bridge Matching for Full-Atom Time-Coarsened Dynamics of Peptides](https://arxiv.org/pdf/2408.15126)'', by Ziyang yu, Wenbing Huang and Yang Liu.
 
 ### Dependencies
 
@@ -92,3 +92,20 @@ python evaluate_all.py --name none --test_set /your/saving/directory/test.jsonl 
 ### License
 
 MIT
+
+### Citation
+
+If you find our code useful in your research, please cite the following paper:
+
+```
+@misc{yu2024force,
+  title={Force-Guided Bridge Matching for Full-Atom Time-Coarsened Dynamics of Peptides},
+  author={Yu, Ziyang and Huang, Wenbing and Liu, Yang},
+  year={2024}
+  eprint={2408.15126},
+  archivePrefix={arXiv},
+}
+```
+
+
+
