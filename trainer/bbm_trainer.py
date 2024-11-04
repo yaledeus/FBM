@@ -21,9 +21,6 @@ class BBMTrainer(Trainer):
     def __init__(self, model, train_loader, valid_loader, config):
         super().__init__(model, train_loader, valid_loader, config)
 
-    def get_scheduler(self, optimizer):
-        return None
-
     def train_step(self, batch, batch_idx):
         return self.share_step(batch, batch_idx, val=False)
 
