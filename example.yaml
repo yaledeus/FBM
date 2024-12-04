@@ -1,0 +1,13 @@
+pdb: 1e28
+top: /path/to/directory/sim/1e28/state0.pdb
+traj_ref_path: /path/to/directory/sim/1e28/1e28_C-traj-arrays.npz
+models:
+  - method: FBM
+    traj_model_path:
+      - /path/to/fbm/1e28_model_ode25_inf1000_guidance0.05.pdb
+  - method: FBM-base
+    traj_model_path:
+      - /path/to/fbm-base/1e28_model_ode25_inf1000_guidance0.05.pdb
+  - method: Timewarp
+    traj_model_path:
+      - /path/to/timewarp/1e28_C_trajectory_model_conditional.npz

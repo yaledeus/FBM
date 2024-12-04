@@ -183,6 +183,16 @@ def kabsch_numpy(P: np.ndarray, Q: np.ndarray):
     return (UP @ R + QC).astype(np.float32), R.astype(np.float32), t.astype(np.float32)
 
 
+def compute_crmsd(X, Y, aligned=False):
+    if not aligned:
+        X_aligned, _, _ = kabsch_numpy(X, Y)
+    else:
+        X_aligned = X
+    dist = np.sum((X_aligned - Y) ** 2, axis=-1)
+    crmsd = np.sqrt(np.mean(dist))
+    return float(crmsd)
+
+
 def recon_bb(psi, R, rbid):
     """
     This function is to reconstruct Cartesian coordinates of backbone atoms with

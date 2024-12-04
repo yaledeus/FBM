@@ -62,6 +62,7 @@ def main(args):
 
     ########## define your model/trainer/trainconfig #########
     config = TrainConfig(args.save_dir, args.lr, args.max_epoch,
+                         warmup=args.warmup,
                          patience=args.patience,
                          grad_clip=args.grad_clip,
                          save_topk=args.save_topk)

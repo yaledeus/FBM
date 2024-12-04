@@ -12,13 +12,12 @@ import os
 from config import inference_config
 from data import *
 from utils import *
-from utils.random_seed import setup_seed, SEED
-from simulation import get_openmm_simulation, spring_constraint_energy_minim
+from utils.random_seed import setup_seed
+from simulation import get_default_parameters, get_simulation_environment_from_pdb, spring_constraint_energy_minim
 
 ### set backend == "pytorch"
 os.environ["GEOMSTATS_BACKEND"] = "pytorch"
 
-setup_seed(SEED)
 torch.set_default_dtype(torch.float32)
 
 
@@ -32,6 +31,8 @@ def create_save_dir(args):
 
 
 def main(args):
+    setup_seed(args.seed)
+
     inf_step = args.inf_step
     ode_step = args.ode_step
     bs = args.bs
@@ -56,7 +57,8 @@ def main(args):
 
     start = time.time()
 
-    simulation = get_openmm_simulation(PDBFile(test_set).topology, gpu=args.gpu)
+    param = get_default_parameters()
+    simulation = get_simulation_environment_from_pdb(test_set, param)
     topology = md.load(test_set).topology
 
     # make test batch
@@ -83,12 +85,12 @@ def main(args):
     md.Trajectory(
         positions,
         topology
-    ).save_pdb(os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}.pdb'))
+    ).save_pdb(os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}_seed{args.seed}.pdb'))
 
-    md.Trajectory(
-        ideal_positions,
-        topology
-    ).save_pdb(os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}_ideal.pdb'))
+    # md.Trajectory(
+    #     ideal_positions,
+    #     topology
+    # ).save_pdb(os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}_seed{args.seed}_ideal.pdb'))
 
     end = time.time()
     elapsed_time = end - start

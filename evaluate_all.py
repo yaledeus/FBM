@@ -7,7 +7,7 @@ import time
 from data import *
 from evaluate import *
 from utils.random_seed import setup_seed, SEED
-from simulation import get_openmm_simulation, spring_constraint_energy_minim
+from simulation import get_default_parameters, get_simulation_environment_from_pdb, spring_constraint_energy_minim
 
 ### set backend == "pytorch"
 os.environ["GEOMSTATS_BACKEND"] = "pytorch"
@@ -45,6 +45,9 @@ def main(args):
 
     pwd_js_list, rg_js_list, tic_js_list, tic2d_js_list, val_ca_list, rmse_contact_list = [], [], [], [], [], []
 
+    # simulation parameters
+    param = get_default_parameters()
+
     for pdbstat in pdbstats:
         pdb = pdbstat["pdb"]
         out_dir = os.path.join(save_dir, pdb)
@@ -54,7 +57,7 @@ def main(args):
         traj_npz = pdbstat["traj_npz_path"]
         state0 = pdbstat["state0_path"]
 
-        simulation = get_openmm_simulation(PDBFile(state0).topology, gpu=args.gpu)
+        simulation = get_simulation_environment_from_pdb(state0, param)
         topology = md.load(state0).topology
 
         # make test batch
@@ -83,10 +86,10 @@ def main(args):
             topology
         ).save_pdb(model_traj := os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}.pdb'))
 
-        md.Trajectory(
-            ideal_positions,
-            topology
-        ).save_pdb(ideal_model_traj := os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}_ideal.pdb'))
+        # md.Trajectory(
+        #     ideal_positions,
+        #     topology
+        # ).save_pdb(ideal_model_traj := os.path.join(out_dir, f'{pdb}_model_ode{ode_step}_inf{inf_step}_guidance{args.guidance}_ideal.pdb'))
 
         # evaluate
         _, pwd_js, rg_js, tic_js, tic2d_js, val_ca, rmse_contact = \

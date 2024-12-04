@@ -2,6 +2,7 @@ import mdtraj as md
 import numpy as np
 import torch
 from scipy.spatial.distance import jensenshannon
+from .geometry import compute_crmsd
 
 
 def compute_pairwise_distances(traj, offset=3):
@@ -40,10 +41,11 @@ def discretize_features2d(features, bins, pseudo_count=1e-6):
 
 
 def compute_phi_psi(traj):
-    """Compute phi and psi (especially for alanine-dipeptide)."""
+    """Compute the joint distribution of phi and psi."""
     _, phi = md.compute_phi(traj)
     _, psi = md.compute_psi(traj)
-    phi, psi = phi[:, 0], psi[:, 0]
+    phi, psi = phi.flatten(), psi.flatten()
+    # phi, psi = phi[:, 0], psi[:, 0]
     return phi, psi
 
 
@@ -99,7 +101,7 @@ def compute_joint_js_distance(feat0_ref, feat1_ref, feat0_model, feat1_model, bi
     return js
 
 
-def compute_contact_matrix(traj, contact_threshold=1.0):
+def compute_residue_matrix(traj, contact_threshold=1.0):
     alpha_carbons = traj.topology.select('name CA')
     n_residues = len(alpha_carbons)
     contact_matrix = np.zeros((n_residues, n_residues))
@@ -107,14 +109,17 @@ def compute_contact_matrix(traj, contact_threshold=1.0):
     distances = md.compute_distances(traj, np.array([(i, j) for i in alpha_carbons for j in alpha_carbons]))
     distances = distances.reshape((traj.n_frames, n_residues, n_residues))
 
+    min_dist_matrix = np.min(distances, axis=0)
+
     for i in range(n_residues):
         for j in range(i + 1, n_residues):
             contact_rate = np.mean(distances[:, i, j] < contact_threshold)
             contact_matrix[i, j] = contact_rate
-    return contact_matrix
+
+    return contact_matrix, min_dist_matrix
 
 
-def compute_validity(traj, clash_threshold=0.3, bond_break_threshold=0.419):
+def compute_validity(traj, clash_threshold=0.3, bond_break_threshold=0.419) -> object:
     alpha_carbons = traj.topology.select('name CA')
     alpha_carbons_xyz = traj.xyz[:, alpha_carbons, :]
     num_atoms = alpha_carbons_xyz.shape[1]
@@ -127,4 +132,17 @@ def compute_validity(traj, clash_threshold=0.3, bond_break_threshold=0.419):
     has_bond_break = np.sum(adjacent_distances > bond_break_threshold, axis=1) > 0
     valid_conformations = ~(has_clash | has_bond_break)
     val_ca = np.mean(valid_conformations)
-    return val_ca
+    return val_ca, valid_conformations
+
+
+def compute_rmsd_over_time(traj, init_pos, lagtime=500, nframe=1000):
+    alpha_carbons = traj.topology.select('name CA')
+    alpha_carbons_xyz = traj.xyz[:, alpha_carbons, :]
+    init_pos = init_pos[alpha_carbons, :]
+    nframe = min(nframe, int(alpha_carbons_xyz.shape[0] / lagtime))
+    selected_indices = np.arange(0, nframe * lagtime, lagtime, dtype=np.compat.long)
+    alpha_carbons_xyz = alpha_carbons_xyz[selected_indices]
+    # nm => Angstrom
+    rmsd_over_time = 10 * np.array([compute_crmsd(xyz, init_pos) for xyz in alpha_carbons_xyz], dtype=float)
+    return rmsd_over_time
+
